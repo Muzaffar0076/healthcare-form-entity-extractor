@@ -1,31 +1,32 @@
 # Data
 
-## CoNLL-2003 baseline dataset
+## CoNLL-2003 general NER baseline
 
-This project uses the CoNLL-2003 English NER dataset as its general NER baseline. The dataset has official training, validation, and test splits.
+This project uses the CoNLL-2003 English NER dataset from Kaggle as a general named-entity-recognition (NER) baseline. The baseline is loaded and analysed in the Kaggle notebook; no downloaded dataset files are stored in this repository.
 
-Its original entity categories are:
+Use the supplied official split files without mixing them:
+
+| Kaggle file | Project split | Purpose |
+| --- | --- | --- |
+| `eng.train` | Training | Fit the general NER baseline. |
+| `eng.testa` | Validation | Make model-development choices. |
+| `eng.testb` | Test | Evaluate the completed baseline once. |
+
+The original CoNLL-2003 entity categories are:
 
 - `PER` — person
 - `ORG` — organisation
 - `LOC` — location
 - `MISC` — miscellaneous
 
-It does **not** include the final healthcare categories (`DATE`, `MEDICATION`, and `CONDITION`). We will use it to build and evaluate a general NER baseline only.
+They use BIO-style labels such as `B-PER` and `I-PER`.
 
-## Downloading the data
+## Healthcare limitation
 
-From the project root, run:
+CoNLL-2003 does **not** include the final healthcare categories: `DATE`, `MEDICATION`, and `CONDITION`. It is used only to build and evaluate a general NER baseline.
 
-```bash
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python scripts/download_conll2003.py
-```
+The final healthcare model will use a separate, documented synthetic healthcare dataset with healthcare-specific BIO labels. It must be trained and evaluated separately from the CoNLL-2003 baseline.
 
-The script downloads the dataset from Hugging Face and saves a local copy in `data/raw/conll2003/`. That folder is ignored by Git, so the repository stores the script and documentation, not a copy of the dataset.
+## Repository policy
 
-## Source
-
-- Dataset: [CoNLL-2003 Parquet conversion](https://huggingface.co/datasets/lhoestq/conll2003). The script loads its published Parquet files directly because new versions of the `datasets` library no longer run the legacy CoNLL loader script.
-- Split policy: use the supplied `train`, `validation`, and `test` splits without mixing them.
-- Download date: recorded by the download script in `data/raw/conll2003/download-metadata.json`.
+Raw datasets and generated datasets are ignored by Git. The repository stores the notebook, code, and documentation needed to reproduce the workflow, not downloaded data files.
