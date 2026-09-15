@@ -2,7 +2,10 @@
 
 ## CoNLL-2003 general NER baseline
 
-This project uses the CoNLL-2003 English NER dataset from Kaggle as a general named-entity-recognition (NER) baseline. The baseline is loaded and analysed in the Kaggle notebook; no downloaded dataset files are stored in this repository.
+This project uses the CoNLL-2003 English NER dataset from Kaggle as a general named-entity-recognition (NER) baseline. The dataset is loaded and analysed in the project notebook; no downloaded dataset files are stored in this repository.
+
+**Dataset source:**  
+https://www.kaggle.com/datasets/juliangarratt/conll2003-dataset
 
 Use the supplied official split files without mixing them:
 
