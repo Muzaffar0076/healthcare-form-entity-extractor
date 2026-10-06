@@ -1,35 +1,46 @@
 # Data
 
-## CoNLL-2003 general NER baseline
+## Dataset
 
-This project uses the CoNLL-2003 English NER dataset from Kaggle as a general named-entity-recognition (NER) baseline. The dataset is loaded and analysed in the project notebook; no downloaded dataset files are stored in this repository.
+This project uses the MACCROBAT2020 biomedical Named Entity Recognition
+(NER) dataset for healthcare-related entity extraction.
 
-**Dataset source:**  
-https://www.kaggle.com/datasets/juliangarratt/conll2003-dataset
+### Dataset Source
 
-Use the supplied official split files without mixing them:
+Hugging Face:
 
-| Kaggle file | Project split | Purpose |
-| --- | --- | --- |
-| `eng.train` | Training | Fit the general NER baseline. |
-| `eng.testa` | Validation | Make model-development choices. |
-| `eng.testb` | Test | Evaluate the completed baseline once. |
+`singh-aditya/MACCROBAT_biomedical_ner`
 
-The original CoNLL-2003 entity categories are:
+The raw dataset used in this project is:
 
-- `PER` — person
-- `ORG` — organisation
-- `LOC` — location
-- `MISC` — miscellaneous
+`data/raw/MACCROBAT2020-V2.json`
 
-They use BIO-style labels such as `B-PER` and `I-PER`.
+## Required Entities
 
-## Healthcare limitation
+The dataset contains many biomedical entity types.
 
-CoNLL-2003 does **not** include the final healthcare categories: `DATE`, `MEDICATION`, and `CONDITION`. It is used only to build and evaluate a general NER baseline.
+For this project, we focus on three required entities:
 
-The final healthcare model will use a separate, documented synthetic healthcare dataset with healthcare-specific BIO labels. It must be trained and evaluated separately from the CoNLL-2003 baseline.
+- `DISEASE_DISORDER` — diseases and disorders
+- `DATE` — dates mentioned in medical text
+- `MEDICATION` — medicines and drugs
 
-## Repository policy
+These entities are relevant to the Healthcare Form Entity Extractor
+because the project needs to identify medical conditions, dates, and
+medications from healthcare form text.
 
-Raw datasets and generated datasets are ignored by Git. The repository stores the notebook, code, and documentation needed to reproduce the workflow, not downloaded data files.
+## Entity Counts
+
+During dataset inspection, the following required entities were found:
+
+- `DISEASE_DISORDER` — 1309
+- `DATE` — 725
+- `MEDICATION` — 1072
+
+## Data Directory
+
+```text
+data/
+├── raw/
+│   └── MACCROBAT2020-V2.json
+└── README.md
