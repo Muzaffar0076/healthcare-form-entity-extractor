@@ -1,0 +1,94 @@
+{
+  "model": "Rule-Based Lexicon & Regex Baseline",
+  "description": "Deterministic dictionary lookup from training split + date regex patterns",
+  "validation_metrics": {
+    "micro": {
+      "precision": 0.2842,
+      "recall": 0.3553,
+      "f1": 0.3158,
+      "total_tp": 135,
+      "total_fp": 340,
+      "total_fn": 245,
+      "total_support": 380
+    },
+    "macro": {
+      "precision": 0.273,
+      "recall": 0.3386,
+      "f1": 0.3022
+    },
+    "per_class": {
+      "CONDITION": {
+        "precision": 0.2383,
+        "recall": 0.3091,
+        "f1": 0.2691,
+        "support": 165,
+        "tp": 51,
+        "fp": 163,
+        "fn": 114
+      },
+      "DATE": {
+        "precision": 0.1226,
+        "recall": 0.1477,
+        "f1": 0.134,
+        "support": 88,
+        "tp": 13,
+        "fp": 93,
+        "fn": 75
+      },
+      "MEDICATION": {
+        "precision": 0.4581,
+        "recall": 0.5591,
+        "f1": 0.5035,
+        "support": 127,
+        "tp": 71,
+        "fp": 84,
+        "fn": 56
+      }
+    }
+  },
+  "test_metrics": {
+    "micro": {
+      "precision": 0.2664,
+      "recall": 0.3594,
+      "f1": 0.306,
+      "total_tp": 138,
+      "total_fp": 380,
+      "total_fn": 246,
+      "total_support": 384
+    },
+    "macro": {
+      "precision": 0.2748,
+      "recall": 0.3444,
+      "f1": 0.301
+    },
+    "per_class": {
+      "CONDITION": {
+        "precision": 0.2577,
+        "recall": 0.4136,
+        "f1": 0.3175,
+        "support": 162,
+        "tp": 67,
+        "fp": 193,
+        "fn": 95
+      },
+      "DATE": {
+        "precision": 0.1667,
+        "recall": 0.2447,
+        "f1": 0.1983,
+        "support": 94,
+        "tp": 23,
+        "fp": 115,
+        "fn": 71
+      },
+      "MEDICATION": {
+        "precision": 0.4,
+        "recall": 0.375,
+        "f1": 0.3871,
+        "support": 128,
+        "tp": 48,
+        "fp": 72,
+        "fn": 80
+      }
+    }
+  }
+}
