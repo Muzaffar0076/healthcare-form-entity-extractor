@@ -35,6 +35,8 @@ artifacts/*
 logs/
 
 # Python build files
-build/
-dist/
-*.egg-info/
+# Node / Frontend
+node_modules/
+*/node_modules/
+frontend/dist/
+.vite/
