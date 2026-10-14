@@ -1,0 +1,102 @@
+{
+  "model_version": "bilstm-crf-v1",
+  "architecture": "BiLSTM-CRF",
+  "best_epoch": 7,
+  "config": {
+    "embedding_dim": 128,
+    "hidden_dim": 256,
+    "dropout": 0.33,
+    "vocab_size": 8671,
+    "num_tags": 7
+  },
+  "validation_metrics": {
+    "micro": {
+      "precision": 0.5697,
+      "recall": 0.3658,
+      "f1": 0.4455,
+      "total_tp": 139,
+      "total_fp": 105,
+      "total_fn": 241,
+      "total_support": 380
+    },
+    "macro": {
+      "precision": 0.5823,
+      "recall": 0.3825,
+      "f1": 0.4591
+    },
+    "per_class": {
+      "CONDITION": {
+        "precision": 0.433,
+        "recall": 0.2545,
+        "f1": 0.3206,
+        "support": 165,
+        "tp": 42,
+        "fp": 55,
+        "fn": 123
+      },
+      "DATE": {
+        "precision": 0.5139,
+        "recall": 0.4205,
+        "f1": 0.4625,
+        "support": 88,
+        "tp": 37,
+        "fp": 35,
+        "fn": 51
+      },
+      "MEDICATION": {
+        "precision": 0.8,
+        "recall": 0.4724,
+        "f1": 0.5941,
+        "support": 127,
+        "tp": 60,
+        "fp": 15,
+        "fn": 67
+      }
+    }
+  },
+  "test_metrics": {
+    "micro": {
+      "precision": 0.5934,
+      "recall": 0.4219,
+      "f1": 0.4932,
+      "total_tp": 162,
+      "total_fp": 111,
+      "total_fn": 222,
+      "total_support": 384
+    },
+    "macro": {
+      "precision": 0.6151,
+      "recall": 0.4454,
+      "f1": 0.5115
+    },
+    "per_class": {
+      "CONDITION": {
+        "precision": 0.475,
+        "recall": 0.3519,
+        "f1": 0.4043,
+        "support": 162,
+        "tp": 57,
+        "fp": 63,
+        "fn": 105
+      },
+      "DATE": {
+        "precision": 0.6988,
+        "recall": 0.617,
+        "f1": 0.6554,
+        "support": 94,
+        "tp": 58,
+        "fp": 25,
+        "fn": 36
+      },
+      "MEDICATION": {
+        "precision": 0.6714,
+        "recall": 0.3672,
+        "f1": 0.4747,
+        "support": 128,
+        "tp": 47,
+        "fp": 23,
+        "fn": 81
+      }
+    }
+  }
+}
