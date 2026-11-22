@@ -6,8 +6,7 @@
  */
 
 import { ensureCsrfToken } from "./authApi";
-
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "./apiConfig";
 
 /**
  * Save an extraction record to the authenticated user's history.

@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { getCsrfTokenFromCookie, fetchCsrfToken } from "../services/authApi";
 import { formatFileSize } from "../utils/formatters";
+import { API_BASE } from "../services/apiConfig";
 
-const API_BASE = "http://localhost:8000";
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export default function PDFUploader({ onExtractionSuccess, isLoading, setIsLoading }) {

@@ -12,8 +12,7 @@ import AuthModal from "./components/AuthModal";
 import ConsentModal from "./components/ConsentModal";
 import { fetchCsrfToken, getCsrfTokenFromCookie } from "./services/authApi";
 import { saveExtractionHistory } from "./services/historyApi";
-
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "./services/apiConfig";
 
 function MainDashboard() {
   const { user, isAuthenticated } = useAuth();

@@ -7,7 +7,7 @@
  * - Complete removal of raw JWT token handling in client JavaScript.
  */
 
-const API_BASE = "http://localhost:8000";
+import { API_BASE } from "./apiConfig";
 
 /**
  * Retrieve CSRF token from browser cookies if present and structurally valid.
