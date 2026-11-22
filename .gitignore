@@ -11,6 +11,7 @@ env/
 # Environment variables / secrets
 .env
 .env.*
+!.env.example
 
 # Jupyter
 .ipynb_checkpoints/
@@ -22,9 +23,12 @@ env/
 # macOS
 .DS_Store
 
-# Data
+# Data & Databases
 data/raw/*
 data/processed/*
+*.db
+*.sqlite
+*.sqlite3
 
 # Model artifacts
 models/*
@@ -40,3 +44,8 @@ node_modules/
 */node_modules/
 frontend/dist/
 .vite/
+
+# Required inference artifacts
+!models/bilstm_crf_v1.pt
+!data/processed/vocab.json
+!data/processed/labels.json

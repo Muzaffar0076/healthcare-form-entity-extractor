@@ -1,0 +1,20 @@
+{
+  "labels": [
+    "O",
+    "B-DATE",
+    "I-DATE",
+    "B-MEDICATION",
+    "I-MEDICATION",
+    "B-CONDITION",
+    "I-CONDITION"
+  ],
+  "label_to_idx": {
+    "O": 0,
+    "B-DATE": 1,
+    "I-DATE": 2,
+    "B-MEDICATION": 3,
+    "I-MEDICATION": 4,
+    "B-CONDITION": 5,
+    "I-CONDITION": 6
+  }
+}

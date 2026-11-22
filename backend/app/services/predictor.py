@@ -27,6 +27,62 @@ DEFAULT_VOCAB_PATH = PROJECT_ROOT / "data" / "processed" / "vocab.json"
 DEFAULT_LABELS_PATH = PROJECT_ROOT / "data" / "processed" / "labels.json"
 DEFAULT_METRICS_PATH = PROJECT_ROOT / "docs" / "bilstm-metrics.json"
 
+import re
+
+# Hybrid fallback patterns for dates
+DATE_PATTERNS = [
+    re.compile(
+        r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\s+\d{2,4}\b",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{2,4}\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b"),
+]
+
+# Common pharmaceutical suffixes (USAN / INN stems) and common medications
+MED_SUFFIXES = (
+    "cillin", "mycin", "micin", "cycline", "floxacin",
+    "statin", "olol", "pril", "sartan", "prazole", "dipine",
+    "dronate", "gliptin", "glitazone", "tidine", "xaban",
+    "mab", "nib", "zosin", "parin",
+)
+
+COMMON_MEDS = {
+    "amoxicillin", "aspirin", "paracetamol", "acetaminophen",
+    "ibuprofen", "metformin", "insulin", "morphine", "fentanyl",
+    "heparin", "warfarin", "omeprazole", "prednisone", "prednisolone",
+    "hydrochlorothiazide", "atorvastatin", "lisinopril", "levothyroxine",
+    "amlodipine", "metoprolol", "albuterol", "losartan", "gabapentin",
+    "sertraline", "simvastatin", "montelukast", "escitalopram", "ciprofloxacin",
+}
+
+# Common medical condition suffixes and lexicon
+COND_SUFFIXES = (
+    "itis", "ism", "emia", "aemia", "pathy", "oma", "osis",
+    "algia", "plegia", "pnea", "spasm", "stenosis", "trophy", "pathy",
+)
+
+COMMON_CONDS = {
+    "hypothyroidism", "hyperthyroidism", "diabetes", "hypertension",
+    "hypotension", "asthma", "pneumonia", "bronchitis", "sinusitis",
+    "fever", "cough", "pain", "fracture", "infarction", "stroke", "failure",
+    "syndrome", "infection", "depression", "anxiety", "arrhythmia", "sepsis",
+    "carcinoma", "edema", "migraine", "headache", "insomnia", "epilepsy",
+    "glaucoma", "dermatitis", "arthritis", "gastritis", "appendicitis",
+    "pancreatitis", "tonsillitis", "meningitis", "tuberculosis", "covid",
+    "influenza", "flu", "allergy", "allergies", "anemia", "leukemia",
+}
+
+NON_MEDICAL_WORDS = {
+    "organism", "mechanism", "tourism", "criticism", "prism",
+    "journalism", "realism", "optimism", "pessimism", "magnetism",
+    "heroism", "patriotism", "downturn", "problem", "system", "program",
+    "testing", "evaluation", "function", "action", "version", "decision",
+}
+
 
 class NERPredictor:
     """
@@ -203,7 +259,93 @@ class NERPredictor:
                 }
             )
 
-        return entities
+        # Apply hybrid fallback to catch OOV terms (dates, unlisted medications)
+        return self._apply_hybrid_fallback(text, entities, tokens_with_offsets)
+
+    def _apply_hybrid_fallback(
+        self,
+        text: str,
+        model_entities: list[dict[str, Any]],
+        tokens_with_offsets: list[tuple[str, int, int]],
+    ) -> list[dict[str, Any]]:
+        """
+        Secondary pass to identify OOV medications and structured date patterns
+        not captured by the neural sequence model.
+        """
+        text_len = len(text)
+        occupied = [False] * text_len
+        combined = list(model_entities)
+
+        for ent in model_entities:
+            s_idx = max(0, ent["start"])
+            e_idx = min(text_len, ent["end"])
+            for i in range(s_idx, e_idx):
+                occupied[i] = True
+
+        # 1. Date regex patterns
+        for pat in DATE_PATTERNS:
+            for match in pat.finditer(text):
+                start, end = match.start(), match.end()
+                if not any(occupied[start:end]):
+                    combined.append(
+                        {
+                            "text": text[start:end],
+                            "label": "DATE",
+                            "start": start,
+                            "end": end,
+                            "confidence": 0.95,
+                        }
+                    )
+                    for i in range(start, end):
+                        occupied[i] = True
+
+        # 2. Medication suffix & lexicon rules
+        for tok, start, end in tokens_with_offsets:
+            if any(occupied[start:end]):
+                continue
+            tok_lower = tok.lower()
+            is_med = tok_lower in COMMON_MEDS or (
+                len(tok_lower) > 5 and any(tok_lower.endswith(suf) for suf in MED_SUFFIXES)
+            )
+            if is_med:
+                combined.append(
+                    {
+                        "text": text[start:end],
+                        "label": "MEDICATION",
+                        "start": start,
+                        "end": end,
+                        "confidence": 0.92,
+                    }
+                )
+                for i in range(start, end):
+                    occupied[i] = True
+
+        # 3. Medical condition suffix & lexicon rules
+        for tok, start, end in tokens_with_offsets:
+            if any(occupied[start:end]):
+                continue
+            tok_lower = tok.lower()
+            if tok_lower in NON_MEDICAL_WORDS:
+                continue
+
+            is_cond = tok_lower in COMMON_CONDS or (
+                len(tok_lower) > 4 and any(tok_lower.endswith(suf) for suf in COND_SUFFIXES)
+            )
+            if is_cond:
+                combined.append(
+                    {
+                        "text": text[start:end],
+                        "label": "CONDITION",
+                        "start": start,
+                        "end": end,
+                        "confidence": 0.90,
+                    }
+                )
+                for i in range(start, end):
+                    occupied[i] = True
+
+        combined.sort(key=lambda x: x["start"])
+        return combined
 
 
 # Singleton instance

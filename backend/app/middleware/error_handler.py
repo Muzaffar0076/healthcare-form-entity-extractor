@@ -21,6 +21,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException) 
     code_map = {
         status.HTTP_400_BAD_REQUEST: "BAD_REQUEST",
         status.HTTP_404_NOT_FOUND: "NOT_FOUND",
+        status.HTTP_413_REQUEST_ENTITY_TOO_LARGE: "PAYLOAD_TOO_LARGE",
         status.HTTP_422_UNPROCESSABLE_ENTITY: "VALIDATION_ERROR",
         status.HTTP_429_TOO_MANY_REQUESTS: "RATE_LIMITED",
         status.HTTP_503_SERVICE_UNAVAILABLE: "MODEL_UNAVAILABLE",
@@ -34,6 +35,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException) 
             "message": str(exc.detail),
             "requestId": f"req-{req_id}",
         },
+        headers=getattr(exc, "headers", None),
     )
 
 
