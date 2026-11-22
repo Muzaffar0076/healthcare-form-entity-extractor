@@ -132,13 +132,15 @@ def set_csrf_cookie(
     """
     token = csrf_token or generate_csrf_token(session_binding=session_binding)
     is_production = os.getenv("ENVIRONMENT", "development").lower() in {"production", "prod"}
+    samesite_val = "none" if is_production else "lax"
+    secure_val = True if is_production else False
 
     response.set_cookie(
         key=CSRF_COOKIE_NAME,
         value=token,
         httponly=False,  # Must be readable by client JS to set X-CSRF-Token header
-        secure=is_production,
-        samesite="lax",
+        secure=secure_val,
+        samesite=samesite_val,
         max_age=CSRF_MAX_AGE_SECONDS,
         path="/",
     )

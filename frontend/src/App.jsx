@@ -10,7 +10,7 @@ import SettingsView from "./components/views/SettingsView";
 import HelpView from "./components/views/HelpView";
 import AuthModal from "./components/AuthModal";
 import ConsentModal from "./components/ConsentModal";
-import { fetchCsrfToken, getCsrfTokenFromCookie } from "./services/authApi";
+import { fetchCsrfToken, ensureCsrfToken } from "./services/authApi";
 import { saveExtractionHistory } from "./services/historyApi";
 import { API_BASE } from "./services/apiConfig";
 
@@ -135,13 +135,11 @@ function MainDashboard() {
     setSelectedEntityIndex(null);
 
     try {
-      let csrfToken = getCsrfTokenFromCookie();
-      if (!csrfToken) {
-        try {
-          csrfToken = await fetchCsrfToken();
-        } catch {
-          // Fallback if CSRF endpoint unneeded for anonymous
-        }
+      let csrfToken = null;
+      try {
+        csrfToken = await ensureCsrfToken();
+      } catch {
+        // Fallback if CSRF endpoint unneeded for anonymous
       }
 
       const headers = { "Content-Type": "application/json" };

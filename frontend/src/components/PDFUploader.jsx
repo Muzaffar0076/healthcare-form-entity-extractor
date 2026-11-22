@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   FileUp,
 } from "lucide-react";
-import { getCsrfTokenFromCookie, fetchCsrfToken } from "../services/authApi";
+import { fetchCsrfToken, ensureCsrfToken } from "../services/authApi";
 import { formatFileSize } from "../utils/formatters";
 import { API_BASE } from "../services/apiConfig";
 
@@ -106,13 +106,11 @@ export default function PDFUploader({ onExtractionSuccess, isLoading, setIsLoadi
     setUploadProgress(25);
 
     try {
-      let csrfToken = getCsrfTokenFromCookie();
-      if (!csrfToken) {
-        try {
-          csrfToken = await fetchCsrfToken();
-        } catch {
-          // Anonymous requests may not require CSRF
-        }
+      let csrfToken = null;
+      try {
+        csrfToken = await ensureCsrfToken();
+      } catch {
+        // Anonymous requests may not require CSRF
       }
 
       const formData = new FormData();

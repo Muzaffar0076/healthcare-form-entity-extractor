@@ -115,6 +115,8 @@ def set_auth_cookies(
     from backend.app.middleware.csrf import set_csrf_cookie
 
     is_production = os.getenv("ENVIRONMENT", "development").lower() in {"production", "prod"}
+    samesite_val = "none" if is_production else "lax"
+    secure_val = True if is_production else False
     max_age_secs = ACCESS_TOKEN_EXPIRE_MINUTES * 60
 
     # 1. HttpOnly access_token cookie (JWT storage)
@@ -122,8 +124,8 @@ def set_auth_cookies(
         key=ACCESS_TOKEN_COOKIE,
         value=token,
         httponly=True,
-        secure=is_production,
-        samesite="lax",
+        secure=secure_val,
+        samesite=samesite_val,
         max_age=max_age_secs,
         path="/",
     )
@@ -146,18 +148,21 @@ def clear_auth_cookies(response: Response) -> None:
     Clear both access_token and csrf_token cookies upon logout.
     """
     is_production = os.getenv("ENVIRONMENT", "development").lower() in {"production", "prod"}
+    samesite_val = "none" if is_production else "lax"
+    secure_val = True if is_production else False
+
     response.delete_cookie(
         key=ACCESS_TOKEN_COOKIE,
         httponly=True,
-        secure=is_production,
-        samesite="lax",
+        secure=secure_val,
+        samesite=samesite_val,
         path="/",
     )
     response.delete_cookie(
         key=CSRF_TOKEN_COOKIE,
         httponly=False,
-        secure=is_production,
-        samesite="lax",
+        secure=secure_val,
+        samesite=samesite_val,
         path="/",
     )
 

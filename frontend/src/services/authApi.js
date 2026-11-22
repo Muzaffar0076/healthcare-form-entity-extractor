@@ -9,6 +9,8 @@
 
 import { API_BASE } from "./apiConfig";
 
+let _cachedCsrfToken = null;
+
 /**
  * Retrieve CSRF token from browser cookies if present and structurally valid.
  * Discards expired tokens (> 23 hours old) or malformed strings.
@@ -50,17 +52,19 @@ export async function fetchCsrfToken() {
     throw new Error("Failed to initialize security tokens.");
   }
   const data = await response.json();
+  _cachedCsrfToken = data.csrfToken;
   return data.csrfToken;
 }
 
 /**
  * Get or fetch an active CSRF token.
  * If forceFresh is true or the cookie token is missing/expired, fetches a fresh token from the server.
+ * Supports cross-origin deployment where document.cookie cannot read cross-domain cookies.
  * @param {boolean} [forceFresh=false]
  * @returns {Promise<string>}
  */
 export async function ensureCsrfToken(forceFresh = false) {
-  let token = forceFresh ? null : getCsrfTokenFromCookie();
+  let token = forceFresh ? null : (_cachedCsrfToken || getCsrfTokenFromCookie());
   if (!token) {
     token = await fetchCsrfToken();
   }
