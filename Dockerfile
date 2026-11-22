@@ -8,8 +8,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install lightweight CPU-only PyTorch (reduces size from 2.5 GB to ~180 MB, preventing OOM on 512MB RAM)
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+# Upgrade pip to ensure proper wheel resolution
+RUN pip install --no-cache-dir --upgrade pip
+
+# Install lightweight CPU-only PyTorch using --extra-index-url so PyPI remains available for dependencies
+RUN pip install --no-cache-dir torch --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Install remaining Python dependencies
 COPY requirements.txt .
