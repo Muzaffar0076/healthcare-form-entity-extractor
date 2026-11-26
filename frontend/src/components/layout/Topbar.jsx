@@ -105,20 +105,8 @@ export default function Topbar({
         </nav>
       </div>
 
-      {/* Right: Quick Action, Theme Toggle & User Menu */}
+      {/* Right: Theme Toggle & User Menu */}
       <div className="topbar-right">
-        {/* Primary Action Button */}
-        {currentRoute !== "new-extraction" && (
-          <button
-            type="button"
-            className="btn btn-primary-sm topbar-cta-btn"
-            onClick={() => onRouteChange("new-extraction")}
-          >
-            <Sparkles size={14} />
-            <span>Extract Information</span>
-          </button>
-        )}
-
         {/* Theme Toggle Button */}
         <button
           type="button"
