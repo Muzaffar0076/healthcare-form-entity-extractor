@@ -1,20 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import {
   User,
-  Settings,
-  Shield,
-  HelpCircle,
   LogOut,
   LogIn,
   UserPlus,
-  LayoutDashboard,
-  Clock,
-  Sparkles,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 /**
- * UserDropdown: Clean, simple account menu with direct shortcuts.
+ * UserDropdown: Minimal account menu showing user identity,
+ * direct profile access, and sign-out controls.
  */
 export default function UserDropdown({
   isOpen,
@@ -76,7 +71,7 @@ export default function UserDropdown({
       role="menu"
       aria-label="User Account Menu"
     >
-      {/* Profile Header */}
+      {/* Profile Header: User identity info */}
       <div className="dropdown-user-header">
         <div className="dropdown-avatar-circle">
           {isAuthenticated ? (
@@ -100,72 +95,23 @@ export default function UserDropdown({
 
       <div className="dropdown-divider" />
 
-      {/* Menu Options */}
-      <div className="dropdown-menu-items">
-        <button
-          type="button"
-          role="menuitem"
-          className="dropdown-item"
-          onClick={() => handleAction(() => onNavigate("dashboard"))}
-        >
-          <LayoutDashboard size={15} />
-          <span>Dashboard</span>
-        </button>
-
-        <button
-          type="button"
-          role="menuitem"
-          className="dropdown-item"
-          onClick={() => handleAction(() => onNavigate("new-extraction"))}
-        >
-          <Sparkles size={15} />
-          <span>Extract Information</span>
-        </button>
-
-        {isAuthenticated && (
-          <button
-            type="button"
-            role="menuitem"
-            className="dropdown-item"
-            onClick={() => handleAction(() => onNavigate("history"))}
-          >
-            <Clock size={15} />
-            <span>Saved Documents</span>
-          </button>
-        )}
-
-        <button
-          type="button"
-          role="menuitem"
-          className="dropdown-item"
-          onClick={() => handleAction(() => onNavigate("settings"))}
-        >
-          <Settings size={15} />
-          <span>Account & Preferences</span>
-        </button>
-
-        <button
-          type="button"
-          role="menuitem"
-          className="dropdown-item"
-          onClick={() => handleAction(onOpenConsent)}
-        >
-          <Shield size={15} />
-          <span>Privacy Terms</span>
-        </button>
-
-        <button
-          type="button"
-          role="menuitem"
-          className="dropdown-item"
-          onClick={() => handleAction(() => onNavigate("help"))}
-        >
-          <HelpCircle size={15} />
-          <span>Help & Guide</span>
-        </button>
-      </div>
-
-      <div className="dropdown-divider" />
+      {/* Menu Options: Direct Profile access (not present in sidebar) */}
+      {isAuthenticated && (
+        <>
+          <div className="dropdown-menu-items">
+            <button
+              type="button"
+              role="menuitem"
+              className="dropdown-item"
+              onClick={() => handleAction(() => onNavigate("settings"))}
+            >
+              <User size={15} />
+              <span>Profile</span>
+            </button>
+          </div>
+          <div className="dropdown-divider" />
+        </>
+      )}
 
       {/* Footer Action: Logout / Login */}
       <div className="dropdown-footer">

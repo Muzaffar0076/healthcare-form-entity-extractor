@@ -127,7 +127,8 @@ export default function Topbar({
           <button
             type="button"
             className={`topbar-avatar-btn ${isDropdownOpen ? "active" : ""}`}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+            onMouseDown={(e) => e.stopPropagation()}
             aria-expanded={isDropdownOpen}
             aria-haspopup="menu"
             title={isAuthenticated ? user?.email : "Guest Profile"}
