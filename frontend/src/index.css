@@ -4701,6 +4701,42 @@ body {
 }
 
 /* Dark Mode: Entity Cards & Inspector */
+[data-theme="dark"] .entity-inspector-container,
+.dark .entity-inspector-container {
+  background: #0b0f19;
+  border-color: #1e293b;
+}
+
+[data-theme="dark"] .btn-copy-all,
+.dark .btn-copy-all {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .btn-copy-all:hover,
+.dark .btn-copy-all:hover {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .empty-filter-state,
+.dark .empty-filter-state {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .entity-cards-scroll-container::-webkit-scrollbar-thumb,
+.dark .entity-cards-scroll-container::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] .entity-cards-scroll-container::-webkit-scrollbar-thumb:hover,
+.dark .entity-cards-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
 [data-theme="dark"] .entity-card,
 .dark .entity-card {
   background: #0f172a;
